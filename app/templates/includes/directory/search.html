@@ -1,0 +1,7 @@
+<form action="{{ url_for('directory.search') }}" method="GET">
+    {% import 'macros/foundation.html' as foundation %}
+    {{ foundation.render_field(form.id) }}
+    {{ foundation.render_field(form.q) }}
+    <input type="submit" value="{{ form.submit.label.text }}" class="button primary small radius">
+</form>
+

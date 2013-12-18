@@ -1,0 +1,83 @@
+@media #{$small} {
+    header#homepage{
+        background: url('http://31.media.tumblr.com/31f24c22894d6d46a7b6f4b0687db9cd/tumblr_mnh0uemhCk1st5lhmo1_1280.jpg');
+        background-size: 100%;
+        background-position: 50%;
+        height: 250px;
+    }
+    .sitename {
+        color: white;
+        text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.7);
+    }
+}
+
+@media #{$small} {
+    header#homepage{
+        height: 350px;
+    }
+
+    header#homepage > div > div:first-child {
+        margin-top: 20px;
+    }
+
+    header#homepage > div > div:last-child {
+        margin-top: 10px;
+    }
+}
+
+@media #{$large} {
+    header#homepage{
+        height: 400px;
+    }
+
+    header#homepage > div > div:first-child {
+        margin-top: 100px;
+    }
+    
+    header#homepage > div >div:last-child {
+        margin-top: 50px;
+    }
+
+}        
+
+@media #{$small} {
+    .offset-top{
+        margin-top: 20px;
+    }
+}
+
+/* Scores */
+
+.arrow {
+    cursor: pointer;
+    color: #7a7a7a;
+}
+.down {
+    color: $down-color;
+}
+
+.up {
+    color: $up-color;
+}
+
+$margin: 4px;
+.score {
+    margin-top: $margin;
+    margin-bottom: $margin;
+}
+
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+
+/* entypo */
+[class*="entypo-"]:before {
+    font-family: 'entypo', sans-serif;
+}
+
+/* helper classes */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}

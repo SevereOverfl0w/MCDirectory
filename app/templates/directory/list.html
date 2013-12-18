@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="row">
+    <div class="large-9 columns offset-top">
+        {% for user in users.items %}
+            <div class="panel">
+                <div class="row">
+                    <div class="small-1 columns text-center">
+                        <div id="upvote{{user.id}}" onclick="vote('up', {{user.id}})" class="arrow entypo-up-bold{% if g.user.is_authenticated() %}{%if g.user.has_upvoted(user)%} up{%endif%}{%endif%}"></div>
+                        <div class="score" id="score{{user.id}}">{{ user.ups - user.downs }}</div>
+                        <div id="downvote{{user.id}}" onclick="vote('down', {{ user.id }})" class="arrow entypo-down-bold{% if g.user.is_authenticated() %}{%if g.user.has_downvoted(user)%} down{%endif%}{%endif%}"></div>
+                    </div>
+                    <div class="small-11 columns">
+                        <h5><a href="{{ url_for('user.profile', id=user.id) }}">{{ user.first_name }} {{ user.last_name }}</a> <small>{{ user.profession }} ({{user.ups}}|{{user.downs}})</small></h5>
+                        {% if user.bio %}
+                        <p>{{ user.bio|truncate(100) }}</p>
+                        {% endif %}
+                        <small style="float:right">User since {{ user.created|timesince }}</small>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+        <div class="panel">
+            <p class="alert text-center">No users found!</p>
+        </div>
+        {% endfor %}
+        <div class="panel pagination-centered">
+            {% import 'macros/foundation.html' as foundation with context %}
+            {{ foundation.paginate(users) }}
+        </div>
+    </div>
+    <div class="large-3 columns offset-top">
+        <div class="panel">
+            <h3>Filter</h3>
+            {% include 'includes/directory/search.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+function vote(action, id){
+    $.getJSON($SCRIPT_ROOT + '/_' + action + 'vote', {
+            id: id,
+        }, function(data){
+                if ( data.result == 'login' ){
+                    $('#loginModal').foundation('reveal', 'open');
+                } else if ( data.result == 'success' ){
+                    $('#score' + id).text(data.value)
+                    var antiaction = (action == 'up') ? 'down' : 'up'
+                    var arrow = $('#' + action + 'vote' + id);
+                    var antiarrow = $('#' + antiaction + 'vote' + id);
+
+                    if ( data.has_voted ) {
+                        if ( arrow.hasClass(action) ) {
+                            arrow.removeClass(action);
+                            antiarrow.addClass(antiaction);
+                        } else {
+                            arrow.addClass(action);
+                            antiarrow.removeClass(antiaction);
+                        }
+                    } else {
+                        arrow.removeClass(action);
+                        antiarrow.removeClass(antiaction);
+                    }
+                } else {
+                    alert('Error');
+                }
+        });
+}
+</script>
+{% endblock %}

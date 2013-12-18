@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="row">
+    <div class="large-4 large-offset-4 offset-top">
+        <div class="panel">
+            <h5>Sign up</h5>
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {% import "macros/foundation.html" as foundation %}
+                {{ foundation.render_field(form.first_name) }}
+                {{ foundation.render_field(form.last_name) }}
+                {{ foundation.render_field(form.email) }}
+                {{ foundation.render_field(form.password) }}
+                {{ foundation.render_field(form.password_again) }}
+                {{ foundation.render_booleanfield(form.is_listed) }}
+                {{ foundation.render_submit(form.submit) }}
+            </form>
+            <small>Already a member? <a href="{{ url_for('user.signin') }}">Sign in</a></small>
+        </div>
+    </div>
+</div>
+{% endblock %}

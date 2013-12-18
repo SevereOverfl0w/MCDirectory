@@ -1,0 +1,66 @@
+{% macro render_genericfield(field) %}
+    {% if field.type == "SubmitField" %}
+        {{ render_submit(field) }}
+    {% elif field.type != "HiddenField" and field.type != "CSRFTokenField" %}
+        {{ render_field(field) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro render_field(field, width=12, inline=False) %}
+    <div class="row">
+        <div class="columns large-{{ width }}{% if field.errors %} error{% endif %}">
+            {% if inline %}
+                {{ field.label(class="inline left") }}
+            {% else %}
+                {{ field.label() }}
+            {% endif %}
+            {{ field(placeholder=field.description, **kwargs) }}
+            <small>
+                {% for error in field.errors %}
+                    {{ error }}
+                {% endfor %}
+            </small>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_booleanfield(field) %}
+    <div class="row">
+        <div class="columns">
+            <label for="{{ field.id }}">
+                {{ field() }}
+                {{ field.label.text }}
+            </label>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_submit(field) %}
+    {{ field(class="button primary small radius", **kwargs) }}
+{% endmacro %}
+
+{% macro paginate(paginate) %}
+    <ul class="pagination">
+        {% if paginate.has_prev %}
+        <li class="arrow"><a href="{{ url_for_page(paginate.prev_num) }}">&laquo;</a></li>
+        {% else %}
+        <li class="arrow unavailable"><a>&laquo;</a></li>
+        {% endif %}
+        {% for page in paginate.iter_pages() %}
+            {% if page %}
+                {% if page != paginate.page %}
+                    <li><a href="{{ url_for_page(page) }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="current"><a>{{ page }}</a></li>
+                {% endif %}
+            {% else %}
+                <li class="unavailable"><a>&hellip;</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if paginate.has_next %}
+        <li class="arrow"><a href="{{ url_for_page(paginate.next_num) }}">&raquo;</a></li>
+        {% else %}
+        <li class="arrow unavailable"><a>&raquo;</a></li>
+        {% endif %}
+    </ul>
+{% endmacro %}

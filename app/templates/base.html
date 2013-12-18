@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+  
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+  
+    <title>Welcome to {{ g.sitename }}</title>
+  
+    <!-- Included CSS Files -->
+    {% assets "css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+    <script>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }}
+    </script>
+</head>
+<body>
+    <!-- Header and Nav -->
+    <div class="contain-to-grid">
+    <nav class="top-bar">
+      <ul class="title-area">
+        <!-- Title Area -->
+        <li class="name">
+          <h1>
+            <a href="#">
+                {{ g.sitename }}
+            </a>
+          </h1>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li class="divider"></li>
+          <li><a href="{{ url_for('frontend.index') }}">Home</a></li>
+          <li class="divider"></li>
+          <li><a href="{{ url_for('directory.search') }}">Directory</a></li>
+          <li class="divider"></li>
+          <li class="has-dropdown">
+          {% if g.user.is_authenticated() %}
+            <a href="#">Hello, {{g.user.first_name}}</a>
+          {% else %}
+            <a href="#">User</a>
+          {% endif %}
+            <ul class="dropdown">
+              {% if g.user.is_authenticated() %}
+              <li><a href="{{ url_for('user.profile', id=g.user.id) }}">Profile</a></li>
+              <li><a href="{{ url_for('user.signout') }}">Sign out</a></li>
+              {% else %}
+              <li><a href="{{ url_for('user.signup') }}">Sign up</a></li>
+              <li><a href="{{ url_for('user.signin') }}">Sign in</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          <li class="divider"></li>
+        </ul>
+      </section>
+    </nav>
+    </div>
+
+  {% block notifications %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="row">
+    {% for category, message in messages %}
+    <div data-alert class="alert-box radius {{ category }}">
+        {{ message }}
+        <a href="#" class="close">&times;</a>
+    </div>
+    {% endfor %}
+    </div>
+  {% endif %}
+  {% endwith %}
+  {% endblock %}
+
+
+  <!-- End Header and Nav -->
+
+  <!-- Main Grid Section -->
+
+
+    {% block container %}
+    {% endblock %}
+
+  <!-- End Grid Section -->
+
+
+
+  <!-- Footer -->
+
+    <footer class="row">
+      <div class="large-12 columns">
+        <hr />
+        <div class="row">
+          <div class="large-6 columns">
+              <small>&copy; Copyright {{ g.sitename }}</small>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div id="loginModal" class="reveal-modal tiny">
+        <h5>You must sign in for that.</h5>
+        <p>Please <a href="{{ url_for('user.signin') }}">Sign in</a> to do that.</p>
+        <p> Haven't got an account? <a href="{{ url_for('user.signup') }}">Sign up</a></p>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+  </footer>
+  
+    {% assets "js" %}
+      <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {% block js %}{% endblock %}
+    <script>
+      $(document).foundation();
+    </script>
+
+</body>
+</html>

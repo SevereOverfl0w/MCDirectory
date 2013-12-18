@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="row">
+    <div class="large-4 large-offset-4 offset-top">
+        <div class="panel">
+            <h5>Recover your account</h5>
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                {% import "macros/foundation.html" as foundation %}
+                {{ foundation.render_field(form.email) }}
+                {{ foundation.render_submit(form.submit) }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

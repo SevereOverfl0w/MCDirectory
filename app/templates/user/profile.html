@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="row">
+    <div class="large-6 large-offset-3 offset-top">
+        <div class="panel">
+            <img src="{{ user.avatar_url(100) }}" style="display: block; float: right">
+            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+            <small>Skype</small>
+            <p>{{ user.skype }}</p>
+            <small>Email</small>
+            <p>{{ user.email }}</p>
+            <small>Profession</small>
+            <p>{{ user.profession }}</p>
+            <small>Bio</small>
+            <p>{{ user.bio }}</p>
+
+            {% if g.user.id == user.id %}
+            <small><a href="{{ url_for('user.edit_profile') }}">Edit profile</a></small>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-6 columns">
+        <div class="panel">
+            <h4>Leave a comment</h4>
+            <form action="" method="POST" id="loginRequired">
+                {{ form.hidden_tag() }}
+                {% import 'macros/foundation.html' as foundation %}
+                {{ foundation.render_field(form.stars) }}
+                <div class="rateit" data-rateit-backingfld='#stars'></div>
+                {{ foundation.render_field(form.comment) }}
+                {{ foundation.render_submit(form.submit) }}
+            </form>
+        </div>
+    </div>
+
+    <div class="large-6 columns">
+    {% for comment in user.comments_for %}
+    <div class="panel">
+        <div class="row">
+            <div class="large-4 columns">
+                <img src="{{ comment.commenter.avatar_url(50) }}"><br><br>
+                <div class="rateit" data-rateit-value="{{ comment.stars }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div><br>
+                <small>{{ comment.time|timesince }}</small>
+            </div>
+            <div class="large-8 columns">
+                <h6>{{ comment.commenter.first_name }} {{ comment.commenter.last_name }}</h6>
+                <p>{{ comment.comment }}</p>
+            </div>
+
+        </div>
+    </div>
+    {% else %}
+    <div class="panel">
+        <p>Nobody has commented yet. Be the first!</p>
+    </div>
+    {% endfor %}
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+{% if g.user.is_anonymous() %}
+<script>
+    $(function () {
+        $('#loginRequired').submit( function(event) {
+            $('#loginModal').foundation('reveal', 'open');
+            event.preventDefault();
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block container %}
+<header id="homepage">
+<div class="row">
+    <div class="large-8 columns">
+        <h1 class="sitename">Welcome to {{ g.sitename }}</h1>
+    </div>
+    <div class="large-4 columns">
+        <div class="panel">
+            {% include 'includes/directory/search.html' %}
+        </div>
+    </div>
+</div>
+</header>
+
+{% block notifications %}{% endblock %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  <div class="row">
+  {% for category, message in messages %}
+  <div data-alert class="alert-box radius {{ category }}">
+      {{ message }}
+      <a href="#" class="close">&times;</a>
+  </div>
+  {% endfor %}
+  </div>
+{% endif %}
+{% endwith %}
+
+<div class="row">
+    <div class="large-12 columns">
+        <h1>What is it?</h1>
+        <p>{{ g.sitename }} is a website where employers (Server owners, Hosts) can find freelancers to work on minecraft-related projects for them. If you're looking for a new builder for a spawn, bukkit plugin developer or even a logo designer, this is the place for you</p>
+    </div>
+</div>
+{% endblock %}
